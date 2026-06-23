@@ -1,9 +1,35 @@
 {
   "name": "BusproCore",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Shared HDL-Buspro-style RS485 bus layer (frame codec, transport, dispatch) used by 4R, 4Z, and other subdevice libraries on the same bus. WARNING: wire frame format is a placeholder pending verification -- see README.",
-  "keywords": ["rs485", "hdl", "buspro", "stm32", "home-automation"],
+  "keywords": [
+    "rs485",
+    "hdl",
+    "buspro",
+    "stm32",
+    "arduino",
+    "home-automation"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Pooria-nek/BusproCore.git"
+  },
+  "authors": [
+    {
+      "name": "Pooria",
+      "maintainer": true
+    }
+  ],
+  "license": "GPL-3.0",
   "frameworks": "arduino",
-  "platforms": ["ststm32", "atmelavr", "*"],
-  "headers": ["BusproFrame.h", "BusproTransport.h", "BusproDevice.h"]
+  "platforms": [
+    "ststm32",
+    "atmelavr",
+    "*"
+  ],
+  "headers": [
+    "BusproFrame.h",
+    "BusproTransport.h",
+    "BusproDevice.h"
+  ]
 }
