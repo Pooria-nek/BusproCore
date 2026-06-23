@@ -12,6 +12,8 @@
  * only knows "bytes in, addressed BusproFrame out" and "BusproFrame in,
  * bytes out". Op-code dispatch lives in BusproDevice.
  */
+// Uncomment for development bus sniffing
+// #define BUSPRO_PROMISCUOUS_MODE
 
 #include <Arduino.h>
 #include "BusproFrame.h"
