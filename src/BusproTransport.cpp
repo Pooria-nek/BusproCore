@@ -1,12 +1,12 @@
 #include "BusproTransport.h"
 
-BusproTransport::BusproTransport(uint8_t mySubnetId, uint8_t myDeviceId, int8_t dePin)
-    : mySubnetId_(mySubnetId), myDeviceId_(myDeviceId), dePin_(dePin) {}
+BusproTransport::BusproTransport(uint16_t myAddress, int8_t dePin)
+    : myAddress_(myAddress), dePin_(dePin) {}
 
 void BusproTransport::begin(HardwareSerial *serial, uint32_t baud)
 {
     serial_ = serial;
-    serial_->begin(baud);
+    serial_->begin(baud, SERIAL_8O1);
     if (dePin_ >= 0)
     {
         pinMode(dePin_, OUTPUT);
@@ -24,11 +24,8 @@ void BusproTransport::setDriverEnabled(bool enabled)
 
 bool BusproTransport::isAddressedToMe(const BusproFrame &f) const
 {
-    const bool subnetMatch = (f.dstSubnetId == mySubnetId_) ||
-                             (f.dstSubnetId == BusproAddr::BROADCAST_SUBNET);
-    const bool deviceMatch = (f.dstDeviceId == myDeviceId_) ||
-                             (f.dstDeviceId == BusproAddr::BROADCAST_DEVICE);
-    return subnetMatch && deviceMatch;
+    const bool addressMatch = (f.dstAddress == myAddress_) || (f.dstAddress == BusproAddr::BROADCAST_ADDRESS);
+    return addressMatch; // && deviceMatch;
 }
 
 bool BusproTransport::poll(BusproFrame &outFrame)

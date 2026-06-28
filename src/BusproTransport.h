@@ -13,7 +13,7 @@
  * bytes out". Op-code dispatch lives in BusproDevice.
  */
 // Uncomment for development bus sniffing
-// #define BUSPRO_PROMISCUOUS_MODE
+#define BUSPRO_PROMISCUOUS_MODE
 
 #include <Arduino.h>
 #include "BusproFrame.h"
@@ -24,7 +24,7 @@ public:
     // HIGH = transmit/driver-enabled, LOW = receive). If your transceiver
     // module ties DE and RE separately, tie RE to the inverse externally,
     // or pass -1 and manage it yourself (e.g. auto-direction transceiver).
-    BusproTransport(uint8_t mySubnetId, uint8_t myDeviceId, int8_t dePin = -1);
+    BusproTransport(uint16_t myAddress, int8_t dePin = -1);
 
     void begin(HardwareSerial* serial, uint32_t baud = 9600);
 
@@ -38,16 +38,17 @@ public:
     // and waiting for transmit-complete before releasing the bus).
     void send(const BusproFrame& frame);
 
-    uint8_t subnetId() const { return mySubnetId_; }
-    uint8_t deviceId() const { return myDeviceId_; }
+    uint16_t address() const { return myAddress_; }
+
+    uint8_t subnetId() const { return myAddress_ >> 8; }
+    uint8_t deviceId() const { return myAddress_ & 0xFF; }
 
 private:
     bool isAddressedToMe(const BusproFrame& f) const;
     void setDriverEnabled(bool enabled);
 
     HardwareSerial* serial_ = nullptr;
-    uint8_t mySubnetId_;
-    uint8_t myDeviceId_;
+    uint16_t myAddress_;
     int8_t  dePin_;
     BusproFrameDecoder decoder_;
 };

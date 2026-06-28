@@ -106,8 +106,8 @@ namespace
 uint16_t busproEncodeFrame(const BusproFrame &frame, uint8_t *outBuf, uint16_t outBufCap)
 {
     // body = SrcSubnet,SrcDev,DstSubnet,DstDev,OpHi,OpLo,Payload...
-    const uint16_t bodyLen = 6 + frame.payloadLen;
-    const uint16_t totalLen = 2 /*sync*/ + 1 /*len*/ + bodyLen + 2 /*checksum*/;
+    const uint16_t bodyLen = 1 /*len*/ + 8 + frame.payloadLen + 2 /*checksum*/;
+    const uint16_t totalLen = 2 /*sync*/ + bodyLen;
 
     if (frame.payloadLen > BUSPRO_MAX_PAYLOAD || totalLen > outBufCap || bodyLen > 255)
     {
@@ -119,13 +119,15 @@ uint16_t busproEncodeFrame(const BusproFrame &frame, uint8_t *outBuf, uint16_t o
     outBuf[idx++] = SYNC2;
     outBuf[idx++] = static_cast<uint8_t>(bodyLen); // TODO_VERIFY_HDL: len convention
 
-    const uint16_t bodyStart = idx;
-    outBuf[idx++] = frame.srcSubnetId;
-    outBuf[idx++] = frame.srcDeviceId;
-    outBuf[idx++] = frame.dstSubnetId;
-    outBuf[idx++] = frame.dstDeviceId;
-    outBuf[idx++] = static_cast<uint8_t>(frame.opCode >> 8);
-    outBuf[idx++] = static_cast<uint8_t>(frame.opCode & 0xFF);
+    // const uint16_t bodyStart = idx;
+    outBuf[idx++] = frame.srcSubnetId();
+    outBuf[idx++] = frame.srcDeviceId();
+    outBuf[idx++] = frame.devTypeHi();
+    outBuf[idx++] = frame.devTypeLo();
+    outBuf[idx++] = frame.opCodeHi();
+    outBuf[idx++] = frame.opCodeLo();
+    outBuf[idx++] = frame.dstSubnetId();
+    outBuf[idx++] = frame.dstDeviceId();
     for (uint8_t i = 0; i < frame.payloadLen; ++i)
     {
         outBuf[idx++] = frame.payload[i];
@@ -133,12 +135,12 @@ uint16_t busproEncodeFrame(const BusproFrame &frame, uint8_t *outBuf, uint16_t o
 
     // Checksum covers LEN byte + body (placeholder choice; TODO_VERIFY_HDL
     // whether real HDL includes the length byte and/or sync bytes in CRC).
-    const uint16_t checksumLen = 1 + bodyLen;
+    const uint16_t checksumLen = bodyLen - 2; // exclude checksum itself
     const uint16_t checksum = calculateCrc16(&outBuf[2], checksumLen);
     outBuf[idx++] = static_cast<uint8_t>(checksum >> 8);
     outBuf[idx++] = static_cast<uint8_t>(checksum & 0xFF);
 
-    (void)bodyStart;
+    // (void)bodyStart;
     return idx;
 }
 
@@ -219,7 +221,7 @@ BusproDecodeResult BusproFrameDecoder::feed(uint8_t byte, BusproFrame &outFrame)
         crcAccum_ |= byte;
         const uint16_t computed = calculateCrc16(buf_, bufIdx_);
         const uint16_t received = crcAccum_; // capture before resync() clears it
-        resync();                    // ready for next frame regardless of outcome
+        resync();                            // ready for next frame regardless of outcome
 
         if (computed != received)
         {
@@ -235,12 +237,10 @@ BusproDecodeResult BusproFrameDecoder::feed(uint8_t byte, BusproFrame &outFrame)
         }
 
         outFrame.reset();
-        outFrame.srcSubnetId = buf_[1];
-        outFrame.srcDeviceId = buf_[2];
+        outFrame.srcAddress = static_cast<uint16_t>((buf_[1] << 8) | buf_[2]);
         outFrame.devType = static_cast<uint16_t>((buf_[3] << 8) | buf_[4]);
         outFrame.opCode = static_cast<uint16_t>((buf_[5] << 8) | buf_[6]);
-        outFrame.dstSubnetId = buf_[7];
-        outFrame.dstDeviceId = buf_[8];
+        outFrame.dstAddress = static_cast<uint16_t>((buf_[7] << 8) | buf_[8]);
         outFrame.payloadLen = payloadLen;
         for (uint8_t i = 0; i < payloadLen; ++i)
         {

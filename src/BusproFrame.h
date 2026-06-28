@@ -56,8 +56,7 @@ namespace BusproOp
 // "all subnets" / "all devices". TODO_VERIFY_HDL against real captures.
 namespace BusproAddr
 {
-    constexpr uint8_t BROADCAST_SUBNET = 0xFF;
-    constexpr uint8_t BROADCAST_DEVICE = 0xFF;
+    constexpr uint16_t BROADCAST_ADDRESS = 0xFFFF;
 }
 
 // Maximum payload bytes this library will buffer per frame.
@@ -66,18 +65,30 @@ constexpr uint8_t BUSPRO_MAX_PAYLOAD = 32;
 
 struct BusproFrame
 {
-    uint8_t srcSubnetId = 0;
-    uint8_t srcDeviceId = 0;
-    uint8_t dstSubnetId = 0;
-    uint8_t dstDeviceId = 0;
+    uint16_t srcAddress = 0;
+    uint16_t dstAddress = 0;
     uint16_t opCode = 0;
     uint16_t devType = 0;
     uint8_t payload[BUSPRO_MAX_PAYLOAD] = {0};
     uint8_t payloadLen = 0;
 
+    uint8_t srcSubnetId() const { return static_cast<uint8_t>(srcAddress >> 8); }
+    uint8_t srcDeviceId() const { return static_cast<uint8_t>(srcAddress & 0xFF); }
+
+    uint8_t devTypeHi() const { return static_cast<uint8_t>(devType >> 8); }
+    uint8_t devTypeLo() const { return static_cast<uint8_t>(devType & 0xFF); }
+
+    uint8_t opCodeHi() const { return static_cast<uint8_t>(opCode >> 8); }
+    uint8_t opCodeLo() const { return static_cast<uint8_t>(opCode & 0xFF); } 
+
+    uint8_t dstSubnetId() const { return static_cast<uint8_t>(dstAddress >> 8); }
+    uint8_t dstDeviceId() const { return static_cast<uint8_t>(dstAddress & 0xFF); }
+
     void reset()
     {
-        srcSubnetId = srcDeviceId = dstSubnetId = dstDeviceId = 0;
+        srcAddress = 0;
+        dstAddress = 0;
+        // srcSubnetId = srcDeviceId = dstSubnetId = dstDeviceId = 0;
         opCode = 0;
         payloadLen = 0;
     }
