@@ -187,27 +187,6 @@ BusproDecodeResult BusproFrameDecoder::feed(uint8_t byte, BusproFrame &outFrame)
         if (bufIdx_ == static_cast<uint8_t>(expectedLen_ - 2))
         {
             state_ = State::WAIT_CRC1;
-
-            // crcAccum_ |= byte;
-            // const uint16_t computed = placeholderChecksum(buf_, bufIdx_);
-            // const uint16_t received = crcAccum_; // capture before resync() clears it
-            // resync();                            // ready for next frame regardless of outcome
-
-            // const uint8_t bodyLen = buf_[0];
-            // const uint8_t payloadLen = static_cast<uint8_t>(bodyLen - 9);
-
-            // outFrame.reset();
-            // outFrame.srcSubnetId = buf_[1];
-            // outFrame.srcDeviceId = buf_[2];
-            // outFrame.devType = static_cast<uint16_t>((buf_[3] << 8) | buf_[4]);
-            // outFrame.opCode = static_cast<uint16_t>((buf_[5] << 8) | buf_[6]);
-            // outFrame.dstSubnetId = buf_[7];
-            // outFrame.dstDeviceId = buf_[8];
-            // outFrame.payloadLen = payloadLen;
-            // for (uint8_t i = 0; i < payloadLen; ++i)
-            // {
-            //     outFrame.payload[i] = buf_[9 + i];
-            // }
         }
         return BusproDecodeResult::IN_PROGRESS;
 

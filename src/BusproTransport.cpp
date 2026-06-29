@@ -1,7 +1,7 @@
 #include "BusproTransport.h"
 
-BusproTransport::BusproTransport(uint16_t myAddress, int8_t dePin)
-    : myAddress_(myAddress), dePin_(dePin) {}
+BusproTransport::BusproTransport(int8_t dePin)
+    : dePin_(dePin) {}
 
 void BusproTransport::begin(HardwareSerial *serial, uint32_t baud)
 {
@@ -22,12 +22,6 @@ void BusproTransport::setDriverEnabled(bool enabled)
     }
 }
 
-bool BusproTransport::isAddressedToMe(const BusproFrame &f) const
-{
-    const bool addressMatch = (f.dstAddress == myAddress_) || (f.dstAddress == BusproAddr::BROADCAST_ADDRESS);
-    return addressMatch; // && deviceMatch;
-}
-
 bool BusproTransport::poll(BusproFrame &outFrame)
 {
     // return true;
@@ -42,16 +36,7 @@ bool BusproTransport::poll(BusproFrame &outFrame)
 
         if (result == BusproDecodeResult::FRAME_READY)
         {
-
-#ifdef BUSPRO_PROMISCUOUS_MODE
             return true; // return every valid frame
-#else
-            // Shared bus: many frames are not for us -- consume and ignore.
-            if (isAddressedToMe(outFrame))
-            {
-                return true;
-            }
-#endif
         }
         else if (result == BusproDecodeResult::FRAME_INVALID)
         {

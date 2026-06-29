@@ -24,33 +24,201 @@
 // mark for verification alongside the frame format itself.
 namespace BusproOp
 {
-    constexpr uint16_t SCENE_CONTROL = 0x0002;           // confirmed by user (4R)
-    constexpr uint16_t SINGLE_CHANNEL_CONTROL = 0x0031;  // TODO_VERIFY_HDL (4R)
-    constexpr uint16_t SINGLE_CHANNEL_RESPONSE = 0x0032; // TODO_VERIFY_HDL (4R)
-    constexpr uint16_t READ_STATUS_REQUEST = 0x0033;     // TODO_VERIFY_HDL (4R)
-    constexpr uint16_t READ_STATUS_RESPONSE = 0x0034;    // TODO_VERIFY_HDL (4R)
+    // Dimmer/Relay Opration Codes //
+    constexpr uint16_t SCENE_CONTROL_REQUEST = 0x0002;      // Scene Control request (4R)
+    constexpr uint16_t SCENE_CONTROL_RESPONSE = 0x0003;     // Scene Control response (4R)
+    constexpr uint16_t SINGLE_CHANNEL_REQUEST = 0x0031;     // Single Channel Control request (4R)
+    constexpr uint16_t SINGLE_CHANNEL_RESPONSE = 0x0032;    // Single Channel Control response (4R)
+    constexpr uint16_t READ_STATUS_REQUEST = 0x0033;        // Read Status of Channels request (4R)
+    constexpr uint16_t READ_STATUS_RESPONSE = 0x0034;       // Read Status of Channels response (4R)
+    constexpr uint16_t REVERSING_CONTROL_REQUEST = 0xDC1C;  // Reversing Control request (4R)
+    constexpr uint16_t REVERSING_CONTROL_RESPONSE = 0xDC1D; // Reversing Control response (4R)
 
-    // 4Z (4-channel dry-contact input board) op-codes. Same family pattern,
-    // same unverified status. Picked these numbers to sit alongside the
-    // 4R single-channel/status family rather than colliding with it --
-    // TODO_VERIFY_HDL once real captures of an HDL input/sensor module
-    // are available (input modules may use a totally different family,
-    // e.g. HDL's "Universal Switch" status push uses its own op-code in
-    // real Buspro -- this is a placeholder, not a researched value).
-    constexpr uint16_t INPUT_STATUS_PUSH = 0x0041;     // TODO_VERIFY_HDL (4Z, unsolicited push on change)
-    constexpr uint16_t INPUT_STATUS_REQUEST = 0x0042;  // TODO_VERIFY_HDL (4Z, master polls current state)
-    constexpr uint16_t INPUT_STATUS_RESPONSE = 0x0043; // TODO_VERIFY_HDL (4Z, reply to poll)
+    // Dimmer Opration Codes //
 
-    // 4T (4-channel NTC temperature sensor board) op-codes. Same family
-    // pattern, same unverified status. Real HDL temperature sensor
-    // modules (e.g. "DDP" dry contact/temp panels) use their own
-    // researched op-codes that I don't have verified access to --
-    // TODO_VERIFY_HDL once real captures of an HDL temp sensor module
-    // are available.
-    constexpr uint16_t TEMP_STATUS_PUSH = 0x0051;     // TODO_VERIFY_HDL (4T, periodic + on-change push)
-    constexpr uint16_t TEMP_STATUS_REQUEST = 0x0052;  // TODO_VERIFY_HDL (4T, master polls current readings)
-    constexpr uint16_t TEMP_STATUS_RESPONSE = 0x0053; // TODO_VERIFY_HDL (4T, reply to poll)
+    constexpr uint16_t SEQUENCE_CONTROL_REQUEST = 0x001A;  // Sequence Control
+    constexpr uint16_t SEQUENCE_CONTROL_RESPONSE = 0x001B; // Sequence Control
+
+    // G3 Curtain Module Opration Codes //
+
+    constexpr uint16_t CURTAIN_CONTROL_REQUEST = 0xE3E0;  // Curtain Control
+    constexpr uint16_t CURTAIN_CONTROL_RESPONSE = 0xE3E1; // Curtain Control
+    constexpr uint16_t READ_CURTAIN_REQUEST = 0xE3E2;     // Read Status of Curtain
+    constexpr uint16_t READ_CURTAIN_RESPONSE = 0xE3E3;    // Read Status of Curtain
+
+    // G4 Relay Module Opration Codes //
+
+    constexpr uint16_t READ_MOTOR_TABLE_REQUEST = 0xDC23;    // Read Motor Group Table from G4 Relay module
+    constexpr uint16_t READ_MOTOR_TABLE_RESPONSE = 0xDC24;   // Read Motor Group Table from G4 Relay module
+    constexpr uint16_t MODIFY_MOTOR_TABLE_REQUEST = 0xDC25;  // Modify Motor Group Table from G4 Relay module
+    constexpr uint16_t MODIFY_MOTOR_TABLE_RESPONSE = 0xDC26; // Modify Motor Group Table from G4 Relay module
+
+    // 9 in 1 sensor/PIR Sensor/Logic/IREmitter Opration Codes //
+
+    constexpr uint16_t UNIVERSAL_SWITCH_REQUEST = 0xE01C;  // Universal Switch
+    constexpr uint16_t UNIVERSAL_SWITCH_RESPONSE = 0xE01D; // Universal Switch
+
+    // DDP Opration Codes //
+
+    constexpr uint16_t READ_TEMP_UNIT_REQUEST = 0xE120;    // Read Celsius/Fahrenheit Flag
+    constexpr uint16_t READ_TEMP_UNIT_RESPONSE = 0xE121;   // Read Celsius/Fahrenheit Flag
+    constexpr uint16_t MODIFY_TEMP_UNIT_REQUEST = 0xE122;  // Modify Celsius/Fahrenheit Flag
+    constexpr uint16_t MODIFY_TEMP_UNIT_RESPONSE = 0xE123; // Modify Celsius/Fahrenheit Flag
+
+    constexpr uint16_t READ_TEMP_RANGE_REQUEST = 0x1900;    // Read AC Temperature Range
+    constexpr uint16_t READ_TEMP_RANGE_RESPONSE = 0x1901;   // Read AC Temperature Range
+    constexpr uint16_t MODIFY_TEMP_RANGE_REQUEST = 0x1902;  // Modify AC Temperature Range
+    constexpr uint16_t MODIFY_TEMP_RANGE_RESPONSE = 0x1903; // Modify AC Temperature Range
+
+    constexpr uint16_t READ_AC_COUNTRANGE_REQUEST = 0xE124;    // Read AC the count of Fan Speed and Mode
+    constexpr uint16_t READ_AC_COUNTRANGE_RESPONSE = 0xE125;   // Read AC the count of Fan Speed and Mode
+    constexpr uint16_t MODIFY_AC_COUNTRANGE_REQUEST = 0xE126;  // Modify AC the count of Fan Speed and Mode
+    constexpr uint16_t MODIFY_AC_COUNTRANGE_RESPONSE = 0xE127; // Modify AC the count of Fan Speed and Mode
+
+    constexpr uint16_t READ_AC_CURENT_STATE_REQUEST = 0xE0EC;  // Read AC Current Status
+    constexpr uint16_t READ_AC_CURENT_STATE_RESPONSE = 0xE0ED; // Read AC Current Status
+
+    constexpr uint16_t PANEL_CONTROL_REQUEST = 0xE3D8;  // Panel Control
+    constexpr uint16_t PANEL_CONTROL_RESPONSE = 0xE3DA; // Panel Control
+
+    constexpr uint16_t READ_SHOWING_TEMP_REQUEST = 0xDC1E;    // Read flag of showing Temperature or Temperature & Clock
+    constexpr uint16_t READ_SHOWING_TEMP_RESPONSE = 0xDC1F;   // Read flag of showing Temperature or Temperature & Clock
+    constexpr uint16_t MODIFY_SHOWING_TEMP_REQUEST = 0xDC20;  // Modify flag of showing Temperature or Temperature & Clock
+    constexpr uint16_t MODIFY_SHOWING_TEMP_RESPONSE = 0xDC21; // Modify flag of showing Temperature or Temperature & Clock
+
+    constexpr uint16_t READ_DIMMER_STATE_REQUEST = 0xDC27;    // Read Read status of enabling or disabling multi-channels dimming on DDP
+    constexpr uint16_t READ_DIMMER_STATE_RESPONSE = 0xDC28;   // Read Read status of enabling or disabling multi-channels dimming on DDP
+    constexpr uint16_t MODIFY_DIMMER_STATE_REQUEST = 0xDC29;  // Modify Read status of enabling or disabling multi-channels dimming on DDP
+    constexpr uint16_t MODIFY_DIMMER_STATE_RESPONSE = 0xDC2A; // Modify Read status of enabling or disabling multi-channels dimming on DDP
+
+    constexpr uint16_t READ_REMOTE_CONFIG_REQUEST = 0xDC2B;    // Read configuration of remote control button
+    constexpr uint16_t READ_REMOTE_CONFIG_RESPONSE = 0xDC2C;   // Read configuration of remote control button
+    constexpr uint16_t MODIFY_REMOTE_CONFIG_REQUEST = 0xDC2D;  // Modify configuration of remote control button
+    constexpr uint16_t MODIFY_REMOTE_CONFIG_RESPONSE = 0xDC2E; // Modify configuration of remote control button
+
+    // Power Meter Opration Codes //
+
+    constexpr uint16_t READ_COEFFICIENT_REQUEST = 0xD920;  // Read Coefficient from Power Meter
+    constexpr uint16_t READ_COEFFICIENT_RESPONSE = 0xD921; // Read Coefficient from Power Meter
+
+    constexpr uint16_t READ_KWH_REQUEST = 0xD92A;  // Read KWH from Power Meter
+    constexpr uint16_t READ_KWH_RESPONSE = 0xD92B; // Read KWH from Power Meter
+
+    constexpr uint16_t READ_CURRENT_REQUEST = 0xD908;  // Read Current from Power Meter
+    constexpr uint16_t READ_CURRENT_RESPONSE = 0xD909; // Read Current from Power Meter
+
+    // Security Opration Codes //
+
+    constexpr uint16_t SECURITY_ARM_REQUEST = 0x0104;  // Arm/Disarm Security
+    constexpr uint16_t SECURITY_ARM_RESPONSE = 0x0105; // Arm/Disarm Security
+
+    constexpr uint16_t SECURITY_ALARM_REQUEST = 0x010C;  // Active Alarm
+    constexpr uint16_t SECURITY_ALARM_RESPONSE = 0x010D; // Active Alarm
+
+    // Sensors Opration Codes //
+
+    constexpr uint16_t READ_SENSOR_STATE_REQUEST = 0xDB00;  // Read Status from 9in1 Sensor
+    constexpr uint16_t READ_SENSOR_STATE_RESPONSE = 0xDB01; // Read Status from 9in1 Sensor
+
+    constexpr uint16_t READ_SENSOR_TEMP_REQUEST = 0xDC00;  // Read temperature from 9in1/6in1 sensor
+    constexpr uint16_t READ_SENSOR_TEMP_RESPONSE = 0xDC01; // Read temperature from 9in1/6in1 sensor
+
+    constexpr uint16_t REPORT_SENSOR_STATE_REQUEST = 0x02CA;  // Forwardly Report Status by 9in1/6in1/5in1 sensor
+    constexpr uint16_t REPORT_SENSOR_STATE_RESPONSE = 0x02CB; // NOT USED // Forwardly Report Status by 9in1/6in1/5in1 sensor
+
+    constexpr uint16_t READ_SENSOR_LINKED_REQUEST = 0xDC30;    // Read the address of linked DDP for Remote Control
+    constexpr uint16_t READ_SENSOR_LINKED_RESPONSE = 0xDC31;   // Read the address of linked DDP for Remote Control
+    constexpr uint16_t MODIFY_SENSOR_LINKED_REQUEST = 0xDC32;  // Modify the address of linked DDP for Remote Control
+    constexpr uint16_t MODIFY_SENSOR_LINKED_RESPONSE = 0xDC33; // Modify the address of linked DDP for Remote Control
+
+    constexpr uint16_t SEND_SENSOR_REQUEST = 0xDC22;  // Send Command from sensor to DDP for remote control
+    constexpr uint16_t SEND_SENSOR_RESPONSE = 0xDC23; // // Send Command from sensor to DDP for remote control
+
+    // 4Z Opration Codes //
+
+    constexpr uint16_t READ_4Z_STATE_REQUEST = 0x012C;  // Read Status from 4Z
+    constexpr uint16_t READ_4Z_STATE_RESPONSE = 0x012D; // Read Status from 4Z
+
+    constexpr uint16_t REPORT_4Z_STATE_REQUEST = 0x02CA;  // Forwardly Report Status by 4Z
+    constexpr uint16_t REPORT_4Z_STATE_RESPONSE = 0x02CB; // NOT USED // Forwardly Report Status by 9in1/6in1/5in1 sensor
+
+    // Address Detection Opration Codes //
+
+    constexpr uint16_t DETECT_ADDRESS_REQUEST = 0xE124;  // Detect Address
+    constexpr uint16_t DETECT_ADDRESS_RESPONSE = 0xE125; // Detect Address
+    constexpr uint16_t MODIFY_ADDRESS_REQUEST = 0xE5F7;  // Modify Address
+    constexpr uint16_t MODIFY_ADDRESS_RESPONSE = 0xE5F8; // Modify Address
+
+    // firmware version Detection Opration Codes //
+
+    constexpr uint16_t READ_FIRMWARE_REQUEST = 0XE3E7;  // Read firmware version
+    constexpr uint16_t READ_FIRMWARE_RESPONSE = 0XE3E8; // Read firmware version
+
+    // hardware version Detection Opration Codes //
+
+    constexpr uint16_t READ_HARDWARE_REQUEST = 0XE3E7;  // Read hardware version
+    constexpr uint16_t READ_HARDWARE_RESPONSE = 0XE3E8; // Read hardware version
+
+    // MAC Address Opration Codes //
+
+    constexpr uint16_t DETECT_MAC_ADDRESS_REQUEST = 0xF003;  // Detect Mac Address
+    constexpr uint16_t DETECT_MAC_ADDRESS_RESPONSE = 0xF004; // Detect Mac Address
+    constexpr uint16_t MODIFY_MAC_ADDRESS_REQUEST = 0xF001;  // Modify Mac Address
+    constexpr uint16_t MODIFY_MAC_ADDRESS_RESPONSE = 0xF002; // Modify Mac Address
+
+    // Temperature Sensor Opration Codes //
+
+    constexpr uint16_t READ_TEMP_REQUEST = 0XE3E7;  // Read Temperature Value
+    constexpr uint16_t READ_TEMP_RESPONSE = 0XE3E8; // Read Temperature Value
+
+    constexpr uint16_t READ_TEMP_COMP_REQUEST = 0x02C6;    // Read Temperature Compensation
+    constexpr uint16_t READ_TEMP_COMP_RESPONSE = 0x02C7;   // Read Temperature Compensation
+    constexpr uint16_t MODIFY_TEMP_COMP_REQUEST = 0x02C8;  // Modify Temperature Compensation
+    constexpr uint16_t MODIFY_TEMP_COMP_RESPONSE = 0x02C9; // Modify Temperature Compensation
+
+    // HVAC Control Opration Codes //
+
+    constexpr uint16_t HVAC_CONTROL_REQUEST = 0x193A;  // HVAC Automatic Control
+    constexpr uint16_t HVAC_CONTROL_RESPONSE = 0x193A; // HVAC Automatic Control
+
+    constexpr uint16_t READ_HVAC_DELAY_REQUEST = 0xE3F4;    // Read delays for Compressor and Fan
+    constexpr uint16_t READ_HVAC_DELAY_RESPONSE = 0xE3F5;   // Read delays for Compressor and Fan
+    constexpr uint16_t MODIFY_HVAC_DELAY_REQUEST = 0xE3F6;  // Modify delays for Compressor and Fan
+    constexpr uint16_t MODIFY_HVAC_DELAY_RESPONSE = 0xE3F7; // Modify delays for Compressor and Fan
+
+    // Z-Audio Opration Codes //
+
+    constexpr uint16_t READ_IR_STATE_REQUEST = 0xDC36;    // Read the IR status of IR Receiver on Z-Audio
+    constexpr uint16_t READ_IR_STATE_RESPONSE = 0xDC37;   // Read the IR status of IR Receiver on Z-Audio
+    constexpr uint16_t MODIFY_IR_STATE_REQUEST = 0xDC38;  // Modify the IR status of IR Receiver on Z-Audio
+    constexpr uint16_t MODIFY_IR_STATE_RESPONSE = 0xDC39; // Modify the IR status of IR Receiver on Z-Audio
+
+    // Impulse Counter Opration Codes //
+
+    constexpr uint16_t READ_CH_REMARK_REQUEST = 0xDD0A;    // Read Channel Remark
+    constexpr uint16_t READ_CH_REMARK_RESPONSE = 0xDD0B;   // Read Channel Remark
+    constexpr uint16_t MODIFY_CH_REMARK_REQUEST = 0xDD0C;  // Modify Channel Remark
+    constexpr uint16_t MODIFY_CH_REMARK_RESPONSE = 0xDD0D; // Modify Channel Remark
+
+    // Dry Contact Opration Codes //
+
+    constexpr uint16_t READ_DRY_CONTACT_REQUEST = 0x041A;    // Read the status of dry contact
+    constexpr uint16_t READ_DRY_CONTACT_RESPONSE = 0x041B;   // Read the status of dry contact
+    constexpr uint16_t MODIFY_DRY_CONTACT_REQUEST = 0x041C;  // Modify NO/NC flag for dry contact
+    constexpr uint16_t MODIFY_DRY_CONTACT_RESPONSE = 0x041D; // Modify NO/NC flag for dry contact
 }
+
+namespace BusproDev
+{
+    constexpr uint16_t DEVICE_DDP = 0x0079;
+
+    constexpr uint16_t DEVICE_4R = 0x01CE;
+
+    constexpr uint16_t DEVICE_4Z = 0x0079;
+
+    constexpr uint16_t DEVICE_HVAC_SB = 0x0077;
+    constexpr uint16_t DEVICE_HVAC_HDL = 0x0960;
+} // namespace BusproDev
 
 // Broadcast convention placeholder -- HDL commonly uses 255 (0xFF) as
 // "all subnets" / "all devices". TODO_VERIFY_HDL against real captures.
@@ -79,7 +247,7 @@ struct BusproFrame
     uint8_t devTypeLo() const { return static_cast<uint8_t>(devType & 0xFF); }
 
     uint8_t opCodeHi() const { return static_cast<uint8_t>(opCode >> 8); }
-    uint8_t opCodeLo() const { return static_cast<uint8_t>(opCode & 0xFF); } 
+    uint8_t opCodeLo() const { return static_cast<uint8_t>(opCode & 0xFF); }
 
     uint8_t dstSubnetId() const { return static_cast<uint8_t>(dstAddress >> 8); }
     uint8_t dstDeviceId() const { return static_cast<uint8_t>(dstAddress & 0xFF); }
