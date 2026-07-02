@@ -22,6 +22,12 @@ void BusproTransport::setDriverEnabled(bool enabled)
     }
 }
 
+// bool BusproTransport::isAddressedToMe(const BusproFrame &f) const
+// {
+//     const bool addressMatch = (f.dstAddress == myAddress_) || (f.dstAddress == BusproAddr::BROADCAST_ADDRESS);
+//     return addressMatch; // && deviceMatch;
+// }
+
 bool BusproTransport::poll(BusproFrame &outFrame)
 {
     // return true;
@@ -47,6 +53,20 @@ bool BusproTransport::poll(BusproFrame &outFrame)
     }
     return false;
 }
+
+// void BusproTransport::send(uint16_t dst, uint16_t devType, uint16_t src, uint16_t opCode, const uint8_t *payload, uint8_t payloadLen)
+// {
+//     BusproFrame frame;
+
+//     frame.srcAddress = src;
+//     frame.devType = devType;
+//     frame.opCode = opCode;
+//     frame.dstAddress = dst;
+//     frame.payloadLen = payloadLen;
+//     memcpy(frame.payload, payload, payloadLen);
+
+//     send(frame);
+// }
 
 void BusproTransport::send(const BusproFrame &frame)
 {

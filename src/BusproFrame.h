@@ -24,15 +24,70 @@
 // mark for verification alongside the frame format itself.
 namespace BusproOp
 {
+    // Universal Opration Codes //
+
+    constexpr uint16_t FINDIT_REQUEST = 0xE442; // find device
+
+    constexpr uint16_t SEARCH_REQUEST_SB = 0x000E;  // find device
+    constexpr uint16_t SEARCH_RESPONSE_SB = 0x000F; // find device
+
+    constexpr uint16_t SEARCH_REQUEST_HDL = 0xE548;  // find device
+    constexpr uint16_t SEARCH_RESPONSE_HDL = 0xE549; // find device
+
+    constexpr uint16_t READ_MAC_ADDRESS_REQUEST = 0xF003;    // Read Address
+    constexpr uint16_t READ_MAC_ADDRESS_RESPONSE = 0xF004;   // Read Address
+    constexpr uint16_t MODIFY_MAC_ADDRESS_REQUEST = 0xF005;  // Modify Address
+    constexpr uint16_t MODIFY_MAC_ADDRESS_RESPONSE = 0xF006; // Modify Address
+
     // Dimmer/Relay Opration Codes //
-    constexpr uint16_t SCENE_CONTROL_REQUEST = 0x0002;      // Scene Control request (4R)
-    constexpr uint16_t SCENE_CONTROL_RESPONSE = 0x0003;     // Scene Control response (4R)
-    constexpr uint16_t SINGLE_CHANNEL_REQUEST = 0x0031;     // Single Channel Control request (4R)
-    constexpr uint16_t SINGLE_CHANNEL_RESPONSE = 0x0032;    // Single Channel Control response (4R)
-    constexpr uint16_t READ_STATUS_REQUEST = 0x0033;        // Read Status of Channels request (4R)
-    constexpr uint16_t READ_STATUS_RESPONSE = 0x0034;       // Read Status of Channels response (4R)
-    constexpr uint16_t REVERSING_CONTROL_REQUEST = 0xDC1C;  // Reversing Control request (4R)
-    constexpr uint16_t REVERSING_CONTROL_RESPONSE = 0xDC1D; // Reversing Control response (4R)
+
+    // constexpr uint16_t SCENE_CONTROL_REQUEST = 0x0000;  // Scene Control request (Relay module)
+    // constexpr uint16_t SCENE_CONTROL_RESPONSE = 0x0001; // Scene Control response (Relay module)
+
+    constexpr uint16_t SCENE_CONTROL_REQUEST = 0x0002;  // Scene Control request (Relay module)
+    constexpr uint16_t SCENE_CONTROL_RESPONSE = 0x0003; // Scene Control response (Relay module)
+
+    constexpr uint16_t READ_ZONE_MEMBERS_REQUEST = 0x0004;    // Read zone member members
+    constexpr uint16_t READ_ZONE_MEMBERS_RESPONSE = 0x0005;   // Read zone member members
+    constexpr uint16_t MODIFY_ZONE_MEMBERS_REQUEST = 0x0006;  // Modify zone member members
+    constexpr uint16_t MODIFY_ZONE_MEMBERS_RESPONSE = 0x0007; // Modify zone member members
+
+    constexpr uint16_t SINGLE_CHANNEL_REQUEST = 0x0031;     // Single Channel Control request (Relay module)
+    constexpr uint16_t SINGLE_CHANNEL_RESPONSE = 0x0032;    // Single Channel Control response (Relay module)
+    constexpr uint16_t READ_STATUS_REQUEST = 0x0033;        // Read Status of Channels request (Relay module)
+    constexpr uint16_t READ_STATUS_RESPONSE = 0x0034;       // Read Status of Channels response (Relay module)
+    constexpr uint16_t REVERSING_CONTROL_REQUEST = 0xDC1C;  // Reversing Control request (Relay module)
+    constexpr uint16_t REVERSING_CONTROL_RESPONSE = 0xDC1D; // Reversing Control response (Relay module)
+
+    constexpr uint16_t READ_CHANNEL_ENABLE_REQUEST = 0x1F54;    // Read channel enable
+    constexpr uint16_t READ_CHANNEL_ENABLE_RESPONSE = 0x1F55;   // Read channel enable
+    constexpr uint16_t MODIFY_CHANNEL_ENABLE_REQUEST = 0x1F56;  // Modify channel enable
+    constexpr uint16_t MODIFY_CHANNEL_ENABLE_RESPONSE = 0x1F57; // Modify channel enable
+
+    constexpr uint16_t READ_ZONE_REMARK_REQUEST = 0xF00A;    // Read zone remark
+    constexpr uint16_t READ_ZONE_REMARK_RESPONSE = 0xF00B;   // Read zone remark
+    constexpr uint16_t MODIFY_ZONE_REMARK_REQUEST = 0xF00C;  // Modify zone remark
+    constexpr uint16_t MODIFY_ZONE_REMARK_RESPONSE = 0xF00D; // Modify zone remark
+
+    constexpr uint16_t READ_CHANNEL_REMARK_REQUEST = 0xF00E;    // Read channel remark
+    constexpr uint16_t READ_CHANNEL_REMARK_RESPONSE = 0xF00F;   // Read channel remark
+    constexpr uint16_t MODIFY_CHANNEL_REMARK_REQUEST = 0xF010;  // Modify channel remark
+    constexpr uint16_t MODIFY_CHANNEL_REMARK_RESPONSE = 0xF011; // Modify channel remark
+
+    // constexpr uint16_t READ_ZONE_REMARK_REQUEST = 0xF024;    // Read zone remark
+    // constexpr uint16_t READ_ZONE_REMARK_RESPONSE = 0xF025;   // Read zone remark
+    // constexpr uint16_t MODIFY_ZONE_REMARK_REQUEST = 0xF026;  // Modify zone remark
+    // constexpr uint16_t MODIFY_ZONE_REMARK_RESPONSE = 0xF027; // Modify zone remark
+
+    constexpr uint16_t READ_CHANNEL_ONDELAY_REQUEST = 0xF04D;    // Read channel on delay
+    constexpr uint16_t READ_CHANNEL_ONDELAY_RESPONSE = 0xF04E;   // Read channel on delay
+    constexpr uint16_t MODIFY_CHANNEL_ONDELAY_REQUEST = 0xF04F;  // Modify channel on delay
+    constexpr uint16_t MODIFY_CHANNEL_ONDELAY_RESPONSE = 0xF050; // Modify channel on delay
+
+    constexpr uint16_t READ_CHANNEL_PROTECT_REQUEST = 0xF03F;    // Read channel on protect
+    constexpr uint16_t READ_CHANNEL_PROTECT_RESPONSE = 0xF040;   // Read channel on protect
+    constexpr uint16_t MODIFY_CHANNEL_PROTECT_REQUEST = 0xF041;  // Modify channel on protect
+    constexpr uint16_t MODIFY_CHANNEL_PROTECT_RESPONSE = 0xF042; // Modify channel on protect
 
     // Dimmer Opration Codes //
 
@@ -159,13 +214,6 @@ namespace BusproOp
     constexpr uint16_t READ_HARDWARE_REQUEST = 0XE3E7;  // Read hardware version
     constexpr uint16_t READ_HARDWARE_RESPONSE = 0XE3E8; // Read hardware version
 
-    // MAC Address Opration Codes //
-
-    constexpr uint16_t DETECT_MAC_ADDRESS_REQUEST = 0xF003;  // Detect Mac Address
-    constexpr uint16_t DETECT_MAC_ADDRESS_RESPONSE = 0xF004; // Detect Mac Address
-    constexpr uint16_t MODIFY_MAC_ADDRESS_REQUEST = 0xF001;  // Modify Mac Address
-    constexpr uint16_t MODIFY_MAC_ADDRESS_RESPONSE = 0xF002; // Modify Mac Address
-
     // Temperature Sensor Opration Codes //
 
     constexpr uint16_t READ_TEMP_REQUEST = 0XE3E7;  // Read Temperature Value
@@ -225,6 +273,7 @@ namespace BusproDev
 namespace BusproAddr
 {
     constexpr uint16_t BROADCAST_ADDRESS = 0xFFFF;
+    constexpr uint16_t PPC_ADDRESS = 0xFDFE;
 }
 
 // Maximum payload bytes this library will buffer per frame.
