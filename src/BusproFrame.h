@@ -22,6 +22,7 @@
 // for 4R. Everything else below follows the same op-code family pattern
 // documented publicly for HDL-Buspro-style devices but is UNCONFIRMED --
 // mark for verification alongside the frame format itself.
+
 namespace BusproOp
 {
     // struct //
@@ -44,41 +45,151 @@ namespace BusproOp
         constexpr uint16_t resp() const { return base + 1; }
     };
 
-    // Universal Opration Codes //
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////// UNIVERSAL REQUEST /////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////
 
-    constexpr uint16_t FINDIT_REQUEST = 0xE442; // find device
+    constexpr RWopration DEVICE_REMARK{0x000E};      // Device remark
+    constexpr RWopration DEVICE_MAC_ADDRESS{0xF003}; // Mac Address
+    constexpr Copration DEVICE_SEARCH_HDL{0xE548};   // find device
+    constexpr Copration DEVICE_FIRMWARE{0xEFFD};     // Read firmware version
+    constexpr Copration DEVICE_HARDWARE{0x3024};     // Read hardware version
+    constexpr Copration DEVICE_FINDIT{0xE442};       // find device
 
-    constexpr uint16_t SEARCH_REQUEST_HDL = 0xE548;  // find device
-    constexpr uint16_t SEARCH_RESPONSE_HDL = 0xE549; // find device
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////// RELAY DEVICES ///////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////
 
-    // Dimmer/Relay Opration Codes //
+    /////////////////////////////// RELAY BASIC INFORMATION ///////////////////////////////
 
-    // constexpr uint16_t _REQUEST = 0x0000;  // Scene Control request (Relay module)
-    // constexpr uint16_t _RESPONSE = 0x0001; // Scene Control response (Relay module)
+    constexpr RWopration CHANNEL_REMARK{0xF00E};       // Channel remark
+    constexpr RWopration CHANNEL_ONDELAY{0xF04D};      // Channel on delay
+    constexpr RWopration CHANNEL_ONPROTECT{0xF03F};    // Channel on protect
+    constexpr RWopration RELAY_CHANNEL_ENABLE{0x1F54}; // Relay Channel enable
 
-    constexpr RWopration SCENE_CONTROL{0x0000};
+    /////////////////////////////// RELAY ZONE SETTING ///////////////////////////////
+
+    constexpr RWopration ZONE_MEMBERS{0x0004}; // Zone members
+    constexpr RWopration ZONE_REMARK{0xF00A};  // Zone remark
+
+    /////////////////////////////// RELAY SCENE SETTING ///////////////////////////////
+
+    constexpr Copration SCENE_READ{0x0000};         //
+    constexpr Copration SCENE_MODIFY{0x0008};       //
+    constexpr RWopration SCENE_REMARK{0xF024};      // Scene remark
+    constexpr RWopration SCENE_POWERON_EN{0xF051};  // set if after power on it goes on spesific scen or not
+    constexpr RWopration SCENE_POWERON_NUM{0XF055}; // after power on it goes to witch scene
+
+    /////////////////////////////// RELAY CURTAIN ///////////////////////////////
+
+    constexpr RWopration CURTAIN_CONFIG{0x1F50}; // Curtain enable
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////// RELAY CONTROLL ///////////////////////////////////////
+
+    constexpr RWopration CONTROL_SINGLE{0x0031};   // Single Channel
+    constexpr Copration CONTROL_REVERSING{0xDC1C}; // Reversing Control request (Relay module)
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////// INPUT DEVICES ///////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+    /////////////////////////////// RELAY SCENE SETTING ///////////////////////////////
+
+    constexpr RWopration INPUT_CHANNEL_ENABLE{0x0128};
+    constexpr RWopration INPUT_UNKNOWN{0x0158};
+    constexpr RWopration INPUT_CHANNEL_MODE{0xD205};
+    constexpr RWopration INPUT_CHANNEL_DIM_MODE{0xD230};
+    constexpr RWopration INPUT_CHANNEL_ENABLE_LOCK{0xE134};
+
+    constexpr RWopration INPUT_UNKNOWN1{0xE0E0};
+
+    constexpr Copration INPUT_REMARK_READ{0xD210};
+
+    constexpr RWopration INPUT_UNKNOWN2{0xD21D};
+
+    constexpr Copration INPUT_REMARK_WRITE{0xD220};
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////// TOUCH DEVICES ///////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+    /////////////////////////////// BUTTON SETTING ///////////////////////////////
+
+    constexpr RWopration TOUCH_CHANNEL_TARGET{0xE000};
+    constexpr RWopration TOUCH_CHANNEL_REMARK{0xE004}; // Load button by id
+    constexpr RWopration TOUCH_CHANNEL_CONFIG{0xE008};
+    constexpr Copration TOUCH_OPRATION1{0xE130};
+    constexpr Copration TOUCH_OPRATION2{0xE134};
+    constexpr Copration TOUCH_OPRATION3{0xE320};
+    constexpr Copration TOUCH_OPRATION4{0xE148};
+
+    /////////////////////////////// BUTTON SETTING ///////////////////////////////
+
+    constexpr Copration TOUCH_INDICATOR{0xE010};     // Indicator indensity (backlight - indicator)
+    constexpr Copration TOUCH_OPRATION6{0xE0E0};     //
+    constexpr Copration TOUCH_TEMP_BRODCAST{0xE0F8}; // ENABLE - ADDRESS - ADJUST
+
+    // /////////////////////////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////// PANEL DEVICES ///////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////////////////////////
+
+    // /////////////////////////////// SETTING ///////////////////////////////
+
+    // constexpr RWopration PANEL_INDICATOR{0xE010};   // Indicator indensity (backlight - indicator)
+    // constexpr RWopration PANEL_OPRATION1{0xE0E0};   //
+    // constexpr RWopration PANEL_PAGE_ENABLE{0xE12C}; // 7 byte 7 page
+    // constexpr RWopration PANEL_OPRATION1{0xE0E4};   //
+    // constexpr RWopration PANEL_OPRATION1{0xE0F8};   //
+    // constexpr RWopration PANEL_OPRATION1{0xE120};   //
+    // constexpr RWopration PANEL_OPRATION1{0xE138};   //
+    // constexpr RWopration PANEL_OPRATION1{0xE128};   //
+
+    // /////////////////////////////// 1 TO 4 PAGE ///////////////////////////////
+
+    // constexpr RWopration PANEL_CHANNEL_TARGET{0xE000}; //
+    // constexpr RWopration PANEL_CHANNEL_REMARK{0xE004}; // Load button by id
+    // constexpr RWopration PANEL_CHANNEL_CONFIG{0xE008}; //
+    // constexpr RWopration PANEL_OPRATION1{0xE130};      //
+    // constexpr RWopration PANEL_OPRATION1{0xE134};      //
+    // constexpr RWopration PANEL_OPRATION1{0xE320};      //
+
+    // /////////////////////////////// AC ///////////////////////////////
+
+    // constexpr RWopration PANEL_OPRATION1{0xE0E4}; //
+    // constexpr RWopration PANEL_OPRATION1{0xE124}; //
+    // constexpr RWopration PANEL_OPRATION1{0x1900}; //
+    // constexpr RWopration PANEL_OPRATION1{0x1913}; //
+    // constexpr RWopration PANEL_OPRATION1{0x190F}; //
+    // constexpr RWopration PANEL_OPRATION1{0xE0F0}; //
+    // constexpr RWopration PANEL_OPRATION1{0x1906}; //
+    // constexpr RWopration PANEL_OPRATION1{0xE0EC}; //
+
+    // /////////////////////////////// FLOOR HEAT ///////////////////////////////
+
+    // constexpr RWopration PANEL_OPRATION1{0x1900}; //
+    // constexpr RWopration PANEL_OPRATION1{0x1940}; //
+    // constexpr RWopration PANEL_OPRATION1{0x1944}; //
+
+    // /////////////////////////////// MUSIC ///////////////////////////////
+
+    // constexpr RWopration PANEL_MUSIC_SETTING{0x1930}; // Enable - Zone - Mode
+    // constexpr RWopration PANEL_OPRATION1{0x1934};     //
+    // constexpr RWopration PANEL_MUSIC_CMD{0x195A};     //
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////
 
     // constexpr Copration SCENE_CONTROL{0x0002}; // Scene Control (Relay module)
 
-    constexpr RWopration ZONE_MEMBERS{0x0004}; // zone member members
-    // constexpr uint16_t READ_ZONE_MEMBERS_RESPONSE = 0x0005;   // Read zone member members
-    // constexpr uint16_t MODIFY_ZONE_MEMBERS_REQUEST = 0x0006;  // Modify zone member members
-    // constexpr uint16_t MODIFY_ZONE_MEMBERS_RESPONSE = 0x0007; // Modify zone member members
-
-    constexpr RWopration DEVICE_REMARK{0x000E}; // Device remark
-    // constexpr uint16_t SEARCH_RESPONSE_SB = 0x000F; // find device
-    // constexpr uint16_t MODIFY_DEVICE_REMARK_REQUEST = 0x0010;  //
-    // constexpr uint16_t MODIFY_DEVICE_REMARK_RESPONSE = 0x0011; //
-
-    // Dimmer Opration Codes //
+    // constexpr RWopration FIRMWARE_UPGRADE1{0xF81A};
+    // constexpr RWopration FIRMWARE_UPGRADE2{0xF81D};
 
     constexpr uint16_t SEQUENCE_CONTROL_REQUEST = 0x001A;  // Sequence Control
     constexpr uint16_t SEQUENCE_CONTROL_RESPONSE = 0x001B; // Sequence Control
-
-    constexpr Copration SINGLE_CHANNEL{0x0031}; // Single Channel Control (Relay module)
-    // constexpr uint16_t SINGLE_CHANNEL_RESPONSE = 0x0032; // Single Channel Control response (Relay module)
-    constexpr Copration READ_STATUS{0x0033}; // Read Status of Channels request (Relay module)
-    // constexpr uint16_t READ_STATUS_RESPONSE = 0x0034; // Read Status of Channels response (Relay module)
 
     // Security Opration Codes //
 
@@ -106,44 +217,6 @@ namespace BusproOp
     constexpr uint16_t MODIFY_DRY_CONTACT_REQUEST = 0x041C;  // Modify NO/NC flag for dry contact
     constexpr uint16_t MODIFY_DRY_CONTACT_RESPONSE = 0x041D; // Modify NO/NC flag for dry contact
 
-    constexpr RWopration CHANNEL_ENABLE{0x1F54}; // Channel enable
-    // constexpr uint16_t READ_CHANNEL_ENABLE_RESPONSE = 0x1F55;   // Read channel enable
-    // constexpr uint16_t MODIFY_CHANNEL_ENABLE_REQUEST = 0x1F56;  // Modify channel enable
-    // constexpr uint16_t MODIFY_CHANNEL_ENABLE_RESPONSE = 0x1F57; // Modify channel enable
-
-    constexpr Copration REVERSING_CONTROL{0xDC1C}; // Reversing Control request (Relay module)
-    // constexpr uint16_t REVERSING_CONTROL_RESPONSE = 0xDC1D; // Reversing Control response (Relay module)
-
-    constexpr RWopration DEVICE_MAC_ADDRESS{0xF003}; // Mac Address
-    // constexpr uint16_t READ_ADDRESS_RESPONSE = 0xF004;   // Read Address
-    // constexpr uint16_t MODIFY_ADDRESS_REQUEST = 0xF005;  // Modify Address
-    // constexpr uint16_t MODIFY_ADDRESS_RESPONSE = 0xF006; // Modify Address
-
-    constexpr RWopration ZONE_REMARK{0xF00A}; // Zone remark
-    // constexpr uint16_t READ_ZONE_REMARK_RESPONSE = 0xF00B;   // Read zone remark
-    // constexpr uint16_t MODIFY_ZONE_REMARK_REQUEST = 0xF00C;  // Modify zone remark
-    // constexpr uint16_t MODIFY_ZONE_REMARK_RESPONSE = 0xF00D; // Modify zone remark
-
-    constexpr RWopration CHANNEL_REMARK{0xF00E}; // Channel remark
-    // constexpr uint16_t READ_CHANNEL_REMARK_RESPONSE = 0xF00F;   // Read channel remark
-    // constexpr uint16_t MODIFY_CHANNEL_REMARK_REQUEST = 0xF010;  // Modify channel remark
-    // constexpr uint16_t MODIFY_CHANNEL_REMARK_RESPONSE = 0xF011; // Modify channel remark
-
-    constexpr RWopration SCENE_REMARK{0xF024}; // Scene remark2307
-    // constexpr uint16_t READ_SCENE_REMARK_RESPONSE = 0xF025;   // Read Scene remark
-    // constexpr uint16_t MODIFY_SCENE_REMARK_REQUEST = 0xF026;  // Modify Scene remark
-    // constexpr uint16_t MODIFY_SCENE_REMARK_RESPONSE = 0xF027; // Modify Scene remark
-
-    constexpr RWopration CHANNEL_ONPROTECT{0xF03F}; // Channel on protect
-    // constexpr uint16_t READ_CHANNEL_ONPROTECT_RESPONSE = 0xF040;   // Read channel on protect
-    // constexpr uint16_t MODIFY_CHANNEL_ONPROTECT_REQUEST = 0xF041;  // Modify channel on protect
-    // constexpr uint16_t MODIFY_CHANNEL_ONPROTECT_RESPONSE = 0xF042; // Modify channel on protect
-
-    constexpr RWopration CHANNEL_ONDELAY{0xF04D}; // Channel on delay
-    // constexpr uint16_t READ_CHANNEL_ONDELAY_RESPONSE = 0xF04E;   // Read channel on delay
-    // constexpr uint16_t MODIFY_CHANNEL_ONDELAY_REQUEST = 0xF04F;  // Modify channel on delay
-    // constexpr uint16_t MODIFY_CHANNEL_ONDELAY_RESPONSE = 0xF050; // Modify channel on delay
-
     // G3 Curtain Module Opration Codes //
 
     constexpr uint16_t CURTAIN_CONTROL_REQUEST = 0xE3E0; // Curtain Control
@@ -161,14 +234,8 @@ namespace BusproOp
     // DDP Opration Codes //
 
     constexpr uint16_t READ_TEMP_UNIT_REQUEST = 0xE120; // Read Celsius/Fahrenheit Flag
-    // constexpr uint16_t READ_TEMP_UNIT_RESPONSE = 0xE121;   // Read Celsius/Fahrenheit Flag
-    // constexpr uint16_t MODIFY_TEMP_UNIT_REQUEST = 0xE122;  // Modify Celsius/Fahrenheit Flag
-    // constexpr uint16_t MODIFY_TEMP_UNIT_RESPONSE = 0xE123; // Modify Celsius/Fahrenheit Flag
 
     constexpr uint16_t READ_AC_COUNTRANGE_REQUEST = 0xE124; // Read AC the count of Fan Speed and Mode
-    // constexpr uint16_t READ_AC_COUNTRANGE_RESPONSE = 0xE125;   // Read AC the count of Fan Speed and Mode
-    // constexpr uint16_t MODIFY_AC_COUNTRANGE_REQUEST = 0xE126;  // Modify AC the count of Fan Speed and Mode
-    // constexpr uint16_t MODIFY_AC_COUNTRANGE_RESPONSE = 0xE127; // Modify AC the count of Fan Speed and Mode
 
     constexpr uint16_t READ_AC_CURENT_STATE_REQUEST = 0xE0EC;  // Read AC Current Status
     constexpr uint16_t READ_AC_CURENT_STATE_RESPONSE = 0xE0ED; // Read AC Current Status
@@ -177,25 +244,12 @@ namespace BusproOp
     constexpr uint16_t PANEL_CONTROL_RESPONSE = 0xE3DA; // Panel Control
 
     constexpr uint16_t READ_MOTOR_TABLE_REQUEST = 0xDC23; // Read Motor Group Table from G4 Relay module
-    // constexpr uint16_t READ_MOTOR_TABLE_RESPONSE = 0xDC24;   // Read Motor Group Table from G4 Relay module
-    // constexpr uint16_t MODIFY_MOTOR_TABLE_REQUEST = 0xDC25;  // Modify Motor Group Table from G4 Relay module
-    // constexpr uint16_t MODIFY_MOTOR_TABLE_RESPONSE = 0xDC26; // Modify Motor Group Table from G4 Relay module
 
     constexpr uint16_t READ_SHOWING_TEMP_REQUEST = 0xDC1E; // Read flag of showing Temperature or Temperature & Clock
-    // constexpr uint16_t READ_SHOWING_TEMP_RESPONSE = 0xDC1F;   // Read flag of showing Temperature or Temperature & Clock
-    // constexpr uint16_t MODIFY_SHOWING_TEMP_REQUEST = 0xDC20;  // Modify flag of showing Temperature or Temperature & Clock
-    // constexpr uint16_t MODIFY_SHOWING_TEMP_RESPONSE = 0xDC21; // Modify flag of showing Temperature or Temperature & Clock
 
     constexpr uint16_t READ_DIMMER_STATE_REQUEST = 0xDC27; // Read Read status of enabling or disabling multi-channels dimming on DDP
-    // constexpr uint16_t READ_DIMMER_STATE_RESPONSE = 0xDC28;   // Read Read status of enabling or disabling multi-channels dimming on DDP
-    // constexpr uint16_t MODIFY_DIMMER_STATE_REQUEST = 0xDC29;  // Modify Read status of enabling or disabling multi-channels dimming on DDP
-    // constexpr uint16_t MODIFY_DIMMER_STATE_RESPONSE = 0xDC2A; // Modify Read status of enabling or disabling multi-channels dimming on DDP
 
     constexpr uint16_t READ_REMOTE_CONFIG_REQUEST = 0xDC2B; // Read configuration of remote control button
-    // constexpr uint16_t READ_REMOTE_CONFIG_RESPONSE = 0xDC2C;   // Read configuration of remote control button
-    // constexpr uint16_t MODIFY_REMOTE_CONFIG_REQUEST = 0xDC2D;  // Modify configuration of remote control button
-    // constexpr uint16_t MODIFY_REMOTE_CONFIG_RESPONSE = 0xDC2E; // Modify configuration of remote control button
-
     // Power Meter Opration Codes //
 
     constexpr uint16_t READ_COEFFICIENT_REQUEST = 0xD920;  // Read Coefficient from Power Meter
@@ -230,25 +284,12 @@ namespace BusproOp
     // constexpr uint16_t MODIFY_ADDRESS_REQUEST = 0xE5F7;  // Modify Address
     // constexpr uint16_t MODIFY_ADDRESS_RESPONSE = 0xE5F8; // Modify Address
 
-    // firmware version Detection Opration Codes //
-
-    constexpr uint16_t READ_FIRMWARE_REQUEST = 0XE3E7;  // Read firmware version
-    constexpr uint16_t READ_FIRMWARE_RESPONSE = 0XE3E8; // Read firmware version
-
-    // hardware version Detection Opration Codes //
-
-    constexpr uint16_t READ_HARDWARE_REQUEST = 0XE3E7;  // Read hardware version
-    constexpr uint16_t READ_HARDWARE_RESPONSE = 0XE3E8; // Read hardware version
-
     // Temperature Sensor Opration Codes //
 
     constexpr uint16_t READ_TEMP_REQUEST = 0XE3E7;  // Read Temperature Value
     constexpr uint16_t READ_TEMP_RESPONSE = 0XE3E8; // Read Temperature Value
 
     constexpr uint16_t READ_TEMP_RANGE_REQUEST = 0x1900; // Read AC Temperature Range
-    // constexpr uint16_t READ_TEMP_RANGE_RESPONSE = 0x1901;   // Read AC Temperature Range
-    // constexpr uint16_t MODIFY_TEMP_RANGE_REQUEST = 0x1902;  // Modify AC Temperature Range
-    // constexpr uint16_t MODIFY_TEMP_RANGE_RESPONSE = 0x1903; // Modify AC Temperature Range
 
     constexpr uint16_t HVAC_CONTROL_REQUEST = 0x193A;  // HVAC Automatic Control
     constexpr uint16_t HVAC_CONTROL_RESPONSE = 0x193A; // HVAC Automatic Control
@@ -273,18 +314,6 @@ namespace BusproOp
     constexpr uint16_t MODIFY_CH_REMARK_RESPONSE = 0xDD0D; // Modify Channel Remark
 
 }
-
-namespace BusproDev
-{
-    constexpr uint16_t DEVICE_DDP = 0x0079;
-
-    constexpr uint16_t DEVICE_4R = 0x01CE;
-
-    constexpr uint16_t DEVICE_4Z = 0x0079;
-
-    constexpr uint16_t DEVICE_HVAC_SB = 0x0077;
-    constexpr uint16_t DEVICE_HVAC_HDL = 0x0960;
-} // namespace BusproDev
 
 // Broadcast convention placeholder -- HDL commonly uses 255 (0xFF) as
 // "all subnets" / "all devices". TODO_VERIFY_HDL against real captures.
