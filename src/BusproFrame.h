@@ -45,6 +45,8 @@ namespace BusproOp
         constexpr uint16_t resp() const { return base + 1; }
     };
 
+    constexpr uint16_t SUCCESS = 0xF8;
+
     /////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////// UNIVERSAL REQUEST /////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,7 +89,8 @@ namespace BusproOp
     /////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////// RELAY CONTROLL ///////////////////////////////////////
 
-    constexpr RWopration CONTROL_SINGLE{0x0031};   // Single Channel
+    constexpr Copration CONTROL_SINGLE{0x0031};
+    constexpr Copration READ_STATE{0x0032};        // Single Channel
     constexpr Copration CONTROL_REVERSING{0xDC1C}; // Reversing Control request (Relay module)
 
     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,68 +117,76 @@ namespace BusproOp
     /////////////////////////////////////// TOUCH DEVICES ///////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////
 
-    /////////////////////////////// BUTTON SETTING ///////////////////////////////
+    // /////////////////////////////// BUTTON SETTING ///////////////////////////////
 
-    constexpr RWopration TOUCH_CHANNEL_TARGET{0xE000};
-    constexpr RWopration TOUCH_CHANNEL_REMARK{0xE004}; // Load button by id
-    constexpr RWopration TOUCH_CHANNEL_CONFIG{0xE008};
-    constexpr Copration TOUCH_OPRATION1{0xE130};
-    constexpr Copration TOUCH_OPRATION2{0xE134};
-    constexpr Copration TOUCH_OPRATION3{0xE320};
-    constexpr Copration TOUCH_OPRATION4{0xE148};
+    // constexpr RWopration CHANNEL_TARGET{0xE000};
+    // constexpr RWopration CHANNEL_REMARK{0xE004};       // Load button by id
+    // constexpr RWopration CHANNEL_MODE{0xE008};         // Read: 1 byte for each button | Write: 1 byte for each button -> F8
+    // constexpr Copration CHANNEL_STATUS{0xE130};        // button state flag
+    // constexpr Copration CHANNEL_DIMMING{0xE134};       // button dimming flag
+    // constexpr Copration CHANNEL_DIMMING_VALUE{0xE320}; // button dimming value
 
-    /////////////////////////////// BUTTON SETTING ///////////////////////////////
+    // constexpr Copration OPRATION1{0xE148}; // Unknown ask you confirm!
+    constexpr Copration RESTORE{0x3000};
+    constexpr Copration RESTORE_E112{0xE112};
 
-    constexpr Copration TOUCH_INDICATOR{0xE010};     // Indicator indensity (backlight - indicator)
-    constexpr Copration TOUCH_OPRATION6{0xE0E0};     //
-    constexpr Copration TOUCH_TEMP_BRODCAST{0xE0F8}; // ENABLE - ADDRESS - ADJUST
+    namespace Touch
+    {
+        // /////////////////////////////////////////////////////////////////////////////////////////////
+        // /////////////////////////////////////// PANEL DEVICES ///////////////////////////////////////
+        // /////////////////////////////////////////////////////////////////////////////////////////////
 
-    // /////////////////////////////////////////////////////////////////////////////////////////////
-    // /////////////////////////////////////// PANEL DEVICES ///////////////////////////////////////
-    // /////////////////////////////////////////////////////////////////////////////////////////////
+        // /////////////////////////////// SETTING ///////////////////////////////
 
-    // /////////////////////////////// SETTING ///////////////////////////////
+        constexpr RWopration INDENSITY{0xE010};   // Indicator indensity (backlight - indicator)
+        constexpr RWopration UI_VALUES{0xE0E0};   //
+        constexpr RWopration PAGE_ENABLE{0xE12C}; // 7 byte 7 page
+        // constexpr RWopration OPRATION2{0xE0E4};   // Unknown
+        constexpr RWopration TEMP_CALIBRATE{0xE0F8}; // Unknown
+        constexpr RWopration TEMP_FLAG{0xE120};      // Unknown
+        constexpr RWopration SLEEPING{0xE138};       //
+        constexpr RWopration TYPE_TIMEDATE{0xE128};  // Unknown
 
-    // constexpr RWopration PANEL_INDICATOR{0xE010};   // Indicator indensity (backlight - indicator)
-    // constexpr RWopration PANEL_OPRATION1{0xE0E0};   //
-    // constexpr RWopration PANEL_PAGE_ENABLE{0xE12C}; // 7 byte 7 page
-    // constexpr RWopration PANEL_OPRATION1{0xE0E4};   //
-    // constexpr RWopration PANEL_OPRATION1{0xE0F8};   //
-    // constexpr RWopration PANEL_OPRATION1{0xE120};   //
-    // constexpr RWopration PANEL_OPRATION1{0xE138};   //
-    // constexpr RWopration PANEL_OPRATION1{0xE128};   //
+        // /////////////////////////////// 1 TO 4 PAGE ///////////////////////////////
 
-    // /////////////////////////////// 1 TO 4 PAGE ///////////////////////////////
+        constexpr RWopration CHANNEL_FUNCTION{0xE000};      // Load function of button by id
+        constexpr RWopration CHANNEL_REMARK{0xE004};        // Load button by id
+        constexpr RWopration CHANNEL_MODE{0xE008};          // button Mode
+        constexpr RWopration CHANNEL_STATUS{0xE130};        // button state flag
+        constexpr RWopration CHANNEL_DIMMING{0xE134};       // button dimming flag
+        constexpr RWopration CHANNEL_DIMMING_VALUE{0xE320}; // button dimming value
 
-    // constexpr RWopration PANEL_CHANNEL_TARGET{0xE000}; //
-    // constexpr RWopration PANEL_CHANNEL_REMARK{0xE004}; // Load button by id
-    // constexpr RWopration PANEL_CHANNEL_CONFIG{0xE008}; //
-    // constexpr RWopration PANEL_OPRATION1{0xE130};      //
-    // constexpr RWopration PANEL_OPRATION1{0xE134};      //
-    // constexpr RWopration PANEL_OPRATION1{0xE320};      //
+        // /////////////////////////////// AC ///////////////////////////////
 
-    // /////////////////////////////// AC ///////////////////////////////
+        constexpr RWopration AC_INFORMATION{0xE0E4};    //
+        constexpr RWopration AC_OPRATION_MODEL{0xE124}; //
+        constexpr RWopration AC_TEMPERATURE{0x1900};    //
+        constexpr RWopration AC_TEMPSENSOR{0x1913};     //
+        constexpr RWopration AC_ECOMODE{0x190F};        //
+        constexpr RWopration AC_IRREAD{0xE0F0};         //
+        constexpr RWopration AC_IRCONTROL{0x1906};      //
+        constexpr RWopration AC_TEST_PANEL{0xE0EC};     //
 
-    // constexpr RWopration PANEL_OPRATION1{0xE0E4}; //
-    // constexpr RWopration PANEL_OPRATION1{0xE124}; //
-    // constexpr RWopration PANEL_OPRATION1{0x1900}; //
-    // constexpr RWopration PANEL_OPRATION1{0x1913}; //
-    // constexpr RWopration PANEL_OPRATION1{0x190F}; //
-    // constexpr RWopration PANEL_OPRATION1{0xE0F0}; //
-    // constexpr RWopration PANEL_OPRATION1{0x1906}; //
-    // constexpr RWopration PANEL_OPRATION1{0xE0EC}; //
+        // /////////////////////////////// FLOOR HEAT ///////////////////////////////
 
-    // /////////////////////////////// FLOOR HEAT ///////////////////////////////
+        // constexpr RWopration FH_TEMPERATURE{0x1900}; //
+        constexpr RWopration FH_INFORMATION{0x1940}; //
+        constexpr RWopration FH_STATE{0x1944};       //
 
-    // constexpr RWopration PANEL_OPRATION1{0x1900}; //
-    // constexpr RWopration PANEL_OPRATION1{0x1940}; //
-    // constexpr RWopration PANEL_OPRATION1{0x1944}; //
+        // /////////////////////////////// MUSIC ///////////////////////////////
 
-    // /////////////////////////////// MUSIC ///////////////////////////////
+        constexpr RWopration MUSIC_SETTING{0x1930};  // Enable - Zone - Mode
+        constexpr RWopration MUSIC_OPRATION{0x1934}; //
+        constexpr RWopration MUSIC_CMD{0x195A};      //
 
-    // constexpr RWopration PANEL_MUSIC_SETTING{0x1930}; // Enable - Zone - Mode
-    // constexpr RWopration PANEL_OPRATION1{0x1934};     //
-    // constexpr RWopration PANEL_MUSIC_CMD{0x195A};     //
+        // /////////////////////////////// IMAGE ///////////////////////////////
+        constexpr Copration IMAGE_READING{0x194C}; // image number + part id
+        constexpr Copration IMAGE_MODIFY{0xE118};  // image number + part id + 20 byte data
+
+
+        constexpr Copration PANEL_CONTROL{0xE3D8};
+
+    } // namespace Touch
 
     /////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -183,7 +194,7 @@ namespace BusproOp
     /////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////
 
-    // constexpr Copration SCENE_CONTROL{0x0002}; // Scene Control (Relay module)
+    constexpr Copration SCENE_CONTROL{0x0002}; // Scene Control
 
     // constexpr RWopration FIRMWARE_UPGRADE1{0xF81A};
     // constexpr RWopration FIRMWARE_UPGRADE2{0xF81D};
@@ -240,8 +251,8 @@ namespace BusproOp
     constexpr uint16_t READ_AC_CURENT_STATE_REQUEST = 0xE0EC;  // Read AC Current Status
     constexpr uint16_t READ_AC_CURENT_STATE_RESPONSE = 0xE0ED; // Read AC Current Status
 
-    constexpr uint16_t PANEL_CONTROL_REQUEST = 0xE3D8;  // Panel Control
-    constexpr uint16_t PANEL_CONTROL_RESPONSE = 0xE3DA; // Panel Control
+    // constexpr uint16_t PANEL_CONTROL_REQUEST = 0xE3D8;  // Panel Control
+    // constexpr uint16_t PANEL_CONTROL_RESPONSE = 0xE3DA; // Panel Control
 
     constexpr uint16_t READ_MOTOR_TABLE_REQUEST = 0xDC23; // Read Motor Group Table from G4 Relay module
 
