@@ -62,29 +62,34 @@ namespace BusproOp
     /////////////////////////////////////// RELAY DEVICES ///////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////
 
-    /////////////////////////////// RELAY BASIC INFORMATION ///////////////////////////////
+    namespace Relay
+    {
 
-    constexpr RWopration CHANNEL_REMARK{0xF00E};       // Channel remark
-    constexpr RWopration CHANNEL_ONDELAY{0xF04D};      // Channel on delay
-    constexpr RWopration CHANNEL_ONPROTECT{0xF03F};    // Channel on protect
-    constexpr RWopration RELAY_CHANNEL_ENABLE{0x1F54}; // Relay Channel enable
+        /////////////////////////////// RELAY BASIC INFORMATION ///////////////////////////////
 
-    /////////////////////////////// RELAY ZONE SETTING ///////////////////////////////
+        constexpr RWopration CHANNEL_REMARK{0xF00E};       // Channel remark
+        constexpr RWopration CHANNEL_ONDELAY{0xF04D};      // Channel on delay
+        constexpr RWopration CHANNEL_ONPROTECT{0xF03F};    // Channel on protect
+        constexpr RWopration CHANNEL_ENABLE{0x1F54}; // Relay Channel enable
 
-    constexpr RWopration ZONE_MEMBERS{0x0004}; // Zone members
-    constexpr RWopration ZONE_REMARK{0xF00A};  // Zone remark
+        /////////////////////////////// RELAY ZONE SETTING ///////////////////////////////
 
-    /////////////////////////////// RELAY SCENE SETTING ///////////////////////////////
+        constexpr RWopration ZONE_MEMBERS{0x0004}; // Zone members
+        constexpr RWopration ZONE_REMARK{0xF00A};  // Zone remark
 
-    constexpr Copration SCENE_READ{0x0000};         //
-    constexpr Copration SCENE_MODIFY{0x0008};       //
-    constexpr RWopration SCENE_REMARK{0xF024};      // Scene remark
-    constexpr RWopration SCENE_POWERON_EN{0xF051};  // set if after power on it goes on spesific scen or not
-    constexpr RWopration SCENE_POWERON_NUM{0XF055}; // after power on it goes to witch scene
+        /////////////////////////////// RELAY SCENE SETTING ///////////////////////////////
 
-    /////////////////////////////// RELAY CURTAIN ///////////////////////////////
+        constexpr Copration SCENE_READ{0x0000};         //
+        constexpr Copration SCENE_MODIFY{0x0008};       //
+        constexpr RWopration SCENE_REMARK{0xF024};      // Scene remark
+        constexpr RWopration SCENE_POWERON_EN{0xF051};  // set if after power on it goes on spesific scen or not
+        constexpr RWopration SCENE_POWERON_NUM{0XF055}; // after power on it goes to witch scene
 
-    constexpr RWopration CURTAIN_CONFIG{0x1F50}; // Curtain enable
+        /////////////////////////////// RELAY CURTAIN ///////////////////////////////
+
+        constexpr RWopration CURTAIN_CONFIG{0x1F50}; // Curtain enable
+
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////// RELAY CONTROLL ///////////////////////////////////////
@@ -182,7 +187,6 @@ namespace BusproOp
         // /////////////////////////////// IMAGE ///////////////////////////////
         constexpr Copration IMAGE_READING{0x194C}; // image number + part id
         constexpr Copration IMAGE_MODIFY{0xE118};  // image number + part id + 20 byte data
-
 
         constexpr Copration PANEL_CONTROL{0xE3D8};
 
