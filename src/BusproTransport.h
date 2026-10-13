@@ -27,9 +27,11 @@ public:
         send(frame);
     }
 
-volatile uint32_t dbgRx = 0, dbgTx = 0, dbgErr = 0;
-    
-// Called from the C callbacks / ISR
+    bool pending() const { return lqTail_ != lqHead_; }
+
+    volatile uint32_t dbgRx = 0, dbgTx = 0, dbgErr = 0;
+
+    // Called from the C callbacks / ISR
     void handleIrq() { HAL_UART_IRQHandler(&huart_); }
     void onRxCplt() { onRxByte(rxByte_); }
     void onRxByte(uint8_t b);
@@ -40,6 +42,9 @@ volatile uint32_t dbgRx = 0, dbgTx = 0, dbgErr = 0;
 
 private:
     void setDriverEnabled(bool enabled);
+
+    volatile uint16_t txLen_ = 0, echoIdx_ = 0;
+    volatile uint32_t txStartMs_ = 0;
 
     UART_HandleTypeDef huart_{};
     int8_t dePin_;

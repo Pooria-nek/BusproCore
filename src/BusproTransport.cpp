@@ -98,6 +98,19 @@ void BusproTransport::setDriverEnabled(bool en)
 // ---- ISR side (keep it tiny) ----
 void BusproTransport::onRxByte(uint8_t b)
 {
+    if (echoIdx_ < txLen_ && (millis() - txStartMs_) < 200)
+    {
+        if (b == txBuf_[echoIdx_])
+        {
+            echoIdx_++;                                // our own byte: swallow it
+            HAL_UART_Receive_IT(&huart_, &rxByte_, 1); // re-arm
+            return;
+        }
+        txLen_ = 0; // mismatch = collision or foreign byte: stop swallowing, keep it
+    }
+
+    // lastRxMs_ = millis();
+
     dbgRx++;
     lastRxMs_ = millis();
 
@@ -139,6 +152,7 @@ bool BusproTransport::poll(BusproFrame &outFrame)
     // 1. internal loopback first
     if (lqTail_ != lqHead_)
     {
+
         outFrame = loopQ_[lqTail_];
         lqTail_ = (lqTail_ + 1) & (LOOP_Q - 1);
         return true;
@@ -172,6 +186,10 @@ void BusproTransport::send(const BusproFrame &frame)
     const uint16_t len = busproEncodeFrame(frame, txBuf_, sizeof(txBuf_));
     if (len == 0)
         return;
+
+    echoIdx_ = 0;
+    txLen_ = len;
+    txStartMs_ = millis();
 
     // loopback = what a receiver would decode from these exact bytes
     BusproFrame looped{};
