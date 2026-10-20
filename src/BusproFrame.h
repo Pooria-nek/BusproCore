@@ -67,10 +67,10 @@ namespace BusproOp
 
         /////////////////////////////// RELAY BASIC INFORMATION ///////////////////////////////
 
-        constexpr RWopration CHANNEL_REMARK{0xF00E};       // Channel remark
-        constexpr RWopration CHANNEL_ONDELAY{0xF04D};      // Channel on delay
-        constexpr RWopration CHANNEL_ONPROTECT{0xF03F};    // Channel on protect
-        constexpr RWopration CHANNEL_ENABLE{0x1F54}; // Relay Channel enable
+        constexpr RWopration CHANNEL_REMARK{0xF00E};    // Channel remark
+        constexpr RWopration CHANNEL_ONDELAY{0xF04D};   // Channel on delay
+        constexpr RWopration CHANNEL_ONPROTECT{0xF03F}; // Channel on protect
+        constexpr RWopration CHANNEL_ENABLE{0x1F54};    // Relay Channel enable
 
         /////////////////////////////// RELAY ZONE SETTING ///////////////////////////////
 
@@ -95,7 +95,7 @@ namespace BusproOp
     ////////////////////////////////////// RELAY CONTROLL ///////////////////////////////////////
 
     constexpr Copration CONTROL_SINGLE{0x0031};
-    constexpr Copration READ_STATE{0x0032};        // Single Channel
+    constexpr Copration READ_STATE{0x0033};        // Single Channel
     constexpr Copration CONTROL_REVERSING{0xDC1C}; // Reversing Control request (Relay module)
 
     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -148,7 +148,7 @@ namespace BusproOp
         constexpr RWopration PAGE_ENABLE{0xE12C}; // 7 byte 7 page
         // constexpr RWopration OPRATION2{0xE0E4};   // Unknown
         constexpr RWopration TEMP_CALIBRATE{0xE0F8}; // Unknown
-        constexpr RWopration TEMP_FLAG{0xE120};      // Unknown
+        constexpr RWopration TEMP_FLAG{0xE120};      // 0 = c 1 = f
         constexpr RWopration SLEEPING{0xE138};       //
         constexpr RWopration TYPE_TIMEDATE{0xE128};  // Unknown
 
@@ -167,10 +167,18 @@ namespace BusproOp
         constexpr RWopration AC_OPRATION_MODEL{0xE124}; //
         constexpr RWopration AC_TEMPERATURE{0x1900};    //
         constexpr RWopration AC_TEMPSENSOR{0x1913};     //
+        constexpr RWopration AC_SYNCHRONUS{0x1960};     //
         constexpr RWopration AC_ECOMODE{0x190F};        //
         constexpr RWopration AC_IRREAD{0xE0F0};         //
         constexpr RWopration AC_IRCONTROL{0x1906};      //
         constexpr RWopration AC_TEST_PANEL{0xE0EC};     //
+
+        constexpr RWopration HVAC_MEMBER{0xE0E8};
+
+        constexpr Copration HVAC_CONTROL{0x193A};      // HVAC Automatic Control
+        constexpr RWopration READ_HVAC_DELAY{0xE3F4};  // Read delays for Compressor and Fan
+        // constexpr RWopration TEMP_FLAG{0xE120};        // 0 = c 1 = f
+        constexpr Copration READ_TEMP_REQUEST{0XE3E7}; // Read Temperature Value
 
         // /////////////////////////////// FLOOR HEAT ///////////////////////////////
 
@@ -301,18 +309,7 @@ namespace BusproOp
 
     // Temperature Sensor Opration Codes //
 
-    constexpr uint16_t READ_TEMP_REQUEST = 0XE3E7;  // Read Temperature Value
-    constexpr uint16_t READ_TEMP_RESPONSE = 0XE3E8; // Read Temperature Value
-
     constexpr uint16_t READ_TEMP_RANGE_REQUEST = 0x1900; // Read AC Temperature Range
-
-    constexpr uint16_t HVAC_CONTROL_REQUEST = 0x193A;  // HVAC Automatic Control
-    constexpr uint16_t HVAC_CONTROL_RESPONSE = 0x193A; // HVAC Automatic Control
-
-    constexpr uint16_t READ_HVAC_DELAY_REQUEST = 0xE3F4;    // Read delays for Compressor and Fan
-    constexpr uint16_t READ_HVAC_DELAY_RESPONSE = 0xE3F5;   // Read delays for Compressor and Fan
-    constexpr uint16_t MODIFY_HVAC_DELAY_REQUEST = 0xE3F6;  // Modify delays for Compressor and Fan
-    constexpr uint16_t MODIFY_HVAC_DELAY_RESPONSE = 0xE3F7; // Modify delays for Compressor and Fan
 
     // Z-Audio Opration Codes //
 
